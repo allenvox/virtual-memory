@@ -59,33 +59,33 @@ uint32_t translate_from_logic(uint32_t logical_addr) {
 
 void mmu_print(uint32_t page_tab_count, uint32_t pages_count) {
   uint32_t virt_addr = 0;
+  printf("present\tRW\tuser_supervisor\twritethru\tcache\taccessed\tdirty\tpgsize\tignore\tpgtableaddr\n");
   for (uint32_t i = 0; i < page_tab_count; i++) { //каталог страниц
-    printf("present: %d ", (page_dir[i]).P);
-    printf("read_write: %d ", (page_dir[i]).RW);
-    printf("user_supervisor: %d ", (page_dir[i]).US);
-    printf("write_through: %d ", (page_dir[i]).PWT);
-    printf("cache_disabled: %d ", (page_dir[i]).PCD);
-    printf("accessed: %d ", (page_dir[i]).A);
-    printf("dirty: %d ", (page_dir[i]).D);
-    printf("page_size:%d ", (page_dir[i]).PS);
-    printf("ignored: %d ", (page_dir[i]).G);
-    printf("page_table_addr: 0x%x ", (uint32_t)((page_dir[i]).address));
-    printf("\n");
+    printf("%d\t\t", (page_dir[i]).P);
+    printf("%d\t", (page_dir[i]).RW);
+    printf("%d\t\t\t\t", (page_dir[i]).US);
+    printf("%d\t\t\t", (page_dir[i]).PWT);
+    printf("%d\t\t", (page_dir[i]).PCD);
+    printf("%d\t\t\t", (page_dir[i]).A);
+    printf("%d\t\t", (page_dir[i]).D);
+    printf("%d\t\t", (page_dir[i]).PS);
+    printf("%d\t\t", (page_dir[i]).G);
+    printf("0x%x\n", (uint32_t)((page_dir[i]).address));
     // Таблица страниц
+    printf("present\tRW\tuser_supervisor\twritethru\tcache\taccessed\tdirty\tPAT\tignore\tphysaddr\tvaddr\n");
     for (uint32_t j = 0; j < MMU_PTE_COUNT; j++) {
       virt_addr = (i << 22) + ((j << 22) >> 10);
-      printf("present: %d ", (page_tab[i][j]).P);
-      printf("read_write: %d ", (page_tab[i][j]).RW);
-      printf("user_supervisor: %d ", (page_tab[i][j]).US);
-      printf("write_through: %d ", (page_tab[i][j]).PWT);
-      printf("cache_disabled: %d ", (page_tab[i][j]).PCD);
-      printf("accessed: %d ", (page_tab[i][j]).A);
-      printf("dirty: %d ", (page_tab[i][j]).D);
-      printf("PAT: %d ", (page_tab[i][j]).PAT);
-      printf("ignored: %d ", (page_tab[i][j]).G);
-      printf("page_phys_addr: %p\t", (void *)(uintptr_t)((page_tab[i][j]).ADDRESS));
-      printf("page_virt_addr: 0x%x\t", virt_addr);
-      printf("\n");
+      printf("%d\t\t", (page_tab[i][j]).P);
+      printf("%d\t", (page_tab[i][j]).RW);
+      printf("%d\t\t\t\t", (page_tab[i][j]).US);
+      printf("%d\t\t\t", (page_tab[i][j]).PWT);
+      printf("%d\t\t", (page_tab[i][j]).PCD);
+      printf("%d\t\t\t", (page_tab[i][j]).A);
+      printf("%d\t\t", (page_tab[i][j]).D);
+      printf("%d\t", (page_tab[i][j]).PAT);
+      printf("%d\t\t", (page_tab[i][j]).G);
+      printf("%p\t\t", (void *)(uintptr_t)((page_tab[i][j]).ADDRESS));
+      printf("0x%x\n", virt_addr);
     }
   }
 }
@@ -138,11 +138,11 @@ int main(int argc, char **argv) {
       page_tab[i][j].ADDRESS = ((uintptr_t)(&page_0) + j * 4096) >> 12; /* assume 4Kb pages */
     }
   }
-  printf("Memory size = %d\n", bin_size);
-  printf("Page directory address = %p\n", (void *)page_dir);
-  printf("Page table count = %d:\n", page_tab_count);
-  printf("Pages count = %d\n", pages_count);
-  printf("MMU Table:\n");
+  printf("memsize = %d, ", bin_size);
+  printf("pgdiraddr = %p, ", (void *)page_dir);
+  printf("pgtabcnt = %d, ", page_tab_count);
+  printf("pgcnt = %d\n\n", pages_count);
+  printf("MMU table\n");
   mmu_print(page_tab_count, pages_count);
   return 0;
 }
