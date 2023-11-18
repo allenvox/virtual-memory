@@ -98,10 +98,10 @@ void mmu_print(uint32_t page_tab_count, uint32_t pages_count) {
 int main(int argc, char **argv) {
   cr3 = (uintptr_t)page_dir >> 12 << 12; // control register 3 - no cache, PAE off
 
-  uint32_t bin_size; // size of memory in bytes
+  uint32_t bin_size = 0; // size of memory in bytes
   if (argc > 1) { // if cli arg[1] exists
     uint8_t i = 0;
-    while (argv[1][i] <= '9' && argv[1][i] >= '0') {
+    while (argv[1][i] >= '0' && argv[1][i] <= '9') {
       bin_size = bin_size * 10 + (uint32_t)(argv[1][i] - '0');
       i++;
     }
@@ -110,8 +110,8 @@ int main(int argc, char **argv) {
     } else if (argv[1][i] == 'M' || argv[1][i] == 'm') {
       bin_size *= (1024 * 1024);
     }
-  } else { // default - 4 KB * 16
-    bin_size = 4096 * 16;
+  } else { // default - 4 KB
+    bin_size = 4096;
   }
   
   uint32_t pages_count = bin_size / 4096;
