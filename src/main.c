@@ -90,7 +90,7 @@ void mmu_print(uint32_t page_tab_count, uint32_t pages_count) {
       printf("%d\t", (page_tab[i][j]).PAT);
       printf("%d\t\t", (page_tab[i][j]).G);
       printf("%p\t\t", (void *)(uintptr_t)((page_tab[i][j]).ADDRESS));
-      printf("0x%x\n", (uint32_t)((i << 22) + ((j << 22) >> 10)); // virtual address
+      printf("0x%x\n", (uint32_t)((i << 22) + ((j << 22) >> 10))); // virtual address
     }
   }
 }
